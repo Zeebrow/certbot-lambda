@@ -79,7 +79,7 @@ variable "lambda_filename" {
 variable "lambda_runtime" {
   description = "Name of the runtime for lambda function."
   type        = string
-  default     = "python3.8"
+  default     = "python3.10"
 }
 
 variable "lambda_memory_size" {

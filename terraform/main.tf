@@ -1,6 +1,10 @@
 terraform {
   # The configuration for this backend will be filled in by terragrunt
-  backend "s3" {}
+  backend "s3" {
+    bucket = "tfstate-certbot-lambda-zbrow"
+    key    = "terraform/tfstate"
+    region = "us-east-1"
+  }
   required_version = ">= 0.15"
   required_providers {
     aws = ">= 3.48.0"
@@ -120,9 +124,9 @@ resource "aws_lambda_function" "certbot" {
     variables = local.lambda_environment
   }
   # Ignore changes in path that happen when different people apply. We have source_code_hash to track actual code changes.
-  lifecycle {
-    ignore_changes = [filename]
-  }
+#  lifecycle {
+#    ignore_changes = [filename]
+#  }
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -163,13 +167,15 @@ locals {
   aws_partition  = data.aws_arn.current.partition
   aws_account_id = data.aws_caller_identity.current.account_id
 
-  certbot_version = "1.17.0"
+  #certbot_version = "1.17.0"
+  certbot_version = "2.5.0"
 
   certbot_emails  = join(",", var.emails)
   certbot_domains = join(",", var.domains)
 
   lambda_handler  = "main.lambda_handler"
-  lambda_filename = length(var.lambda_filename) > 0 ? var.lambda_filename : "${path.module}/../certbot/certbot-${local.certbot_version}.zip"
+  # lambda_filename = length(var.lambda_filename) > 0 ? var.lambda_filename : "${path.module}/../certbot/certbot-${local.certbot_version}.zip"
+  lambda_filename = var.lambda_filename
   lambda_hash     = filebase64sha256(local.lambda_filename)
 
   lambda_description = var.lambda_description != "" ? var.lambda_description : "Run certbot for ${local.certbot_domains}"

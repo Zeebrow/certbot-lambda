@@ -8,3 +8,8 @@ terraform.tfvars
 override.tf
 
 certbot/
+hosted-zones*
+sourceme
+*.tfvars
+venv
+notes*
