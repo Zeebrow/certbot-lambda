@@ -38,6 +38,12 @@ variable "hosted_zone_id" {
   default     = ""
 }
 
+#variable "hosted_zone_ids" {
+#  description = "ID of the Route53 hosted zone, where domains are hosted in."
+#  type        = list(string)
+#  default     = []
+#}
+
 variable "create_aws_route53_iam_role" {
   description = "Controls if route53 iam role for lambda should be created. If set value to false, the environment of credentials could be provided in `lambda_custom_environment`"
   type        = bool
